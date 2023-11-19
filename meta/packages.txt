@@ -15,6 +15,7 @@ pamixer
 pavucontrol
 pipewire-pulse
 playerctl
+python-gobject
 qt5-wayland
 qt6-wayland
 qt6ct
@@ -22,7 +23,7 @@ slurp
 socat
 wl-clipboard
 wmname
-xdg-desktop-portal-wlr
+xdg-desktop-portal-hyprland
 xmlstarlet
 zsh
 zsh-completions

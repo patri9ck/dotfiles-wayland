@@ -136,9 +136,9 @@
        :spacing 5
     (time)
     (system)
+    (volume)
     (battery)
-    (brightness)
-    (volume)))
+    (brightness)))
 
 
 (defwidget center []

@@ -44,6 +44,11 @@ dotfiles() {
 
 case "$1" in
 	packages)
+		if [ -z "$2" ]
+		then
+			exit 1
+		fi
+		
 		packages "$2"
 		;;
 	dotfiles)

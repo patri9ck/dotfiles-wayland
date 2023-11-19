@@ -10,7 +10,7 @@ do
 		then
 			sleep 1
 
-			line="playerctl -s -p "$PLAYER" metadata -f '{{artist}} - {{title}}'"
+			line="$(playerctl -s -p "$PLAYER" metadata -f '{{artist}} - {{title}}')"
 		fi
 		
 		eww update "player-music=$line"

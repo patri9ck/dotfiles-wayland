@@ -5,9 +5,12 @@ then
 	exit 1
 fi
 
-if pid="$(pgrep -x "$1")"
+if pids="$(pgrep -x "$1")"
 then
-	hyprctl dispatch focuswindow "pid:$pid"
+	for pid in $pids
+	do
+		hyprctl dispatch focuswindow "pid:$pid"
+	done
 else
 	eval "$1"
 fi

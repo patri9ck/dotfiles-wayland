@@ -166,7 +166,7 @@
        :space-evenly false
        :tooltip seconds
     (label :class "nested-label"
-           :text "")
+           :text "")
     (label :class "left-margin-button"
            :text time)
     (revealer :transition "slideright"
@@ -281,7 +281,7 @@
          :space-evenly false
          :visible "${hostname == "notebook"}"
       (label :class "nested-label"
-             :text "")
+             :text "")
       (revealer :transition "slideright"
                 :reveal brightness-hovered
         (scale :class "scale"
@@ -361,7 +361,7 @@
         (button :class "left-margin-button"
 	        :onclick `hyprctl dispatch exit`
 		:tooltip user
-          "")
+          "")
         (button :class "nested-button"
 	        :onclick `reboot`
 	  ""))))))

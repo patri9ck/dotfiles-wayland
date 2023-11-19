@@ -229,7 +229,7 @@
       (revealer :transition "slidedown"
                 :reveal wlan-hovered
         (button :class "top-margin-button"
-	        :onclick "$HOME/.scripts/launcher close & eww update wlan-hovered=false && pkill -x iwgtk || iwgtk &"
+	        :onclick "pkill -x iwgtk || (eww update wlan-hovered=false && $HOME/.scripts/launcher close && iwgtk &)"
           "")))))
 
 
@@ -244,7 +244,7 @@
       (revealer :transition "slidedown"
                 :reveal bluetooth-hovered
         (button :class "top-margin-button"
-	        :onclick `$HOME/.scripts/launcher close & eww update bluetooth-hovered=false && pkill -x blueman-manager || blueman-manager &`
+	        :onclick `pkill -x blueman-manager || (eww update bluetooth-hovered=false && $HOME/.scripts/launcher close && blueman-manager &)`
           "")))))
 
 

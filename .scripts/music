@@ -1,16 +1,16 @@
 #!/bin/sh
 
-if playerctl -s -p 'spotify' status >/dev/null
+if playerctl -s -p spotify status >/dev/null
 then
-	title="$(playerctl -s -p 'spotify' metadata title)"
-	artist="$(playerctl -s -p 'spotify' metadata artist)"
+	title="$(playerctl -s -p spotify metadata title)"
+	artist="$(playerctl -s -p spotify metadata artist)"
 	
 	if [ -z "$title" ] || [ -z "$artist" ]
 	then
-		echo "$artist$title"
+		echo $artist$title
 	else
-		echo "$artist - $title"
+		echo $artist - $title
 	fi
 else
-	echo 'No Music'
+	echo No Music
 fi

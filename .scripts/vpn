@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if ! [ "$HOSTNAME" = notebook ]
+then
+	exit 1
+fi
+
 is_enabled() {
 	if [ -z "$(sudo wg)" ]
 	then
@@ -10,9 +15,9 @@ is_enabled() {
 status() {
 	if is_enabled
 	then
-		echo 'enabled'
+		echo enabled
 	else
-		echo 'disabled'
+		echo disabled
 	fi
 }
 
@@ -33,13 +38,13 @@ endpoint() {
 }
 
 case "$1" in
-	'status')
+	status)
 		status
 		;;
-	'toggle')
+	toggle)
 		toggle
 		;;
-	'endpoint')
+	endpoint)
 		endpoint
 		;;
 	*)

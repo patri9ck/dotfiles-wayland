@@ -19,12 +19,12 @@ upload() {
 
 		wl-copy "$url"
 
-		echo "$url $(printf 'https://imgur.com/delete/%s' $(echo "$response" | xml sel -t --value-of '/data/deletehash'))" >> "$log"
+		echo "$url https://imgur.com/delete/$(echo "$response" | xml sel -t --value-of '/data/deletehash')" >> "$log"
 	else
 		wl-copy < "$image"
 	fi
 
-	notify-send 'Screenshot taken' "$body"
+	notify-send 'Screenshot Taken' "$body"
 }
 
 fullscreen() {
@@ -45,10 +45,10 @@ selection() {
 }
 
 case "$1" in
-	'fullscreen')
+	fullscreen)
 		fullscreen
 		;;
-	'selection')
+	selection)
 		selection
 		;;
 	*)

@@ -1,7 +1,3 @@
-; Windows
-
-
-
 (defwindow bar :monitor 0
                :geometry (geometry :width "100%"
                                    :anchor "top center")
@@ -49,12 +45,6 @@
           (webcam))
         (apps)))))
 
-
-
-; Variables
-
-
-
 (defvar apps "[]")
 
 (defvar launcher-opened false)
@@ -100,7 +90,7 @@
   `[ "$($HOME/.scripts/webcam status)" = enabled ] && echo  || echo `)
 
 (defpoll brightness :interval "1s"
-  `[ -f "/usr/bin/light" ] && light`)
+  `[ "$HOSTNAME" = notebook ] && light`)
 
 (defpoll volume-status :interval "1s"
   `[ "$(pamixer --get-mute)" = false ] && echo  || echo `)
@@ -125,12 +115,6 @@
 
 (deflisten current-workspace :initial "1"
   `$HOME/.scripts/workspaces current`)
-
-
-
-; Basic Widgets
-
-
 
 (defwidget container []
   (box :class "container"
@@ -159,12 +143,6 @@
        :spacing 5
     (workspaces)
     (launcher)))
-
-
-
-; Widgets
-
-
 
 (defwidget time []
   (eventbox :onhover `eww update time-hovered=true`

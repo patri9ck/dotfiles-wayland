@@ -60,7 +60,7 @@ def parse_entry(path, query):
     return { "name": name, "icon": icon, "path": path.name }
 
 
-def get_entries(query = ""):
+def get_entries(query):
     entries = []
 
     for path in Path("/usr/share/applications").glob("*.desktop"):
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     match sys.argv[1]:
         case "open":
-            update(get_entries())
+            update(get_entries(""))
 
             subprocess.run(["eww", "open", "launcher"])
             subprocess.run(["eww", "update", "launcher-opened=true"])
@@ -91,12 +91,7 @@ if __name__ == "__main__":
             subprocess.run(["eww", "close", "launcher"])
             subprocess.run(["eww", "update", "launcher-opened=false"])
         case "update":
-            if length < 3:
-                entries = get_entries()
-            else:
-                entries = get_entries(sys.argv[2])
-
-            update(entries)
+            update(get_entries("" if length < 3 else sys.argv[2]))
         case "run":
             if length < 3:
                 exit(1)

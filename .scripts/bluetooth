@@ -10,9 +10,9 @@ is_enabled() {
 status() {
 	if is_enabled
 	then
-		echo 'enabled'
+		echo enabled
 	else
-		echo 'disabled'
+		echo disabled
 	fi
 }
 
@@ -26,10 +26,10 @@ toggle() {
 }
 
 case "$1" in
-	'status')
+	status)
 		status
 		;;
-	'toggle')
+	toggle)
 		toggle
 		;;
 	*)

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-battery="$(find '/sys/class/power_supply' -regex '/sys/class/power_supply/BAT[0-9]+')"
+battery="$(find /sys/class/power_supply -regex '/sys/class/power_supply/BAT[0-9]+')"
 
 if [ -z "$battery" ]
 then
@@ -20,10 +20,10 @@ time() {
 
 	if [ "$status" = 'charging' ]
 	then
-		echo 'Charging...'
+		echo Charging...
 	elif [ "$status" = "full" ]
 	then
-		echo 'Full'
+		echo Full
 	else
 		energy="$(cat "$battery/energy_now")"
 		power="$(cat "$battery/power_now")"
@@ -35,13 +35,13 @@ time() {
 }
 
 case "$1" in
-	'status')
+	status)
 		status
 		;;
-	'capacity')
+	capacity)
 		capacity
 		;;
-	'time')
+	time)
 		time
 		;;
 	*)

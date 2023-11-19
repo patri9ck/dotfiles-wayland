@@ -1,6 +1,6 @@
 #!/bin/sh
 
-interface="$(find '/sys/class/net' -regex '/sys/class/net/wlan[0-9]+' -printf '%f\n')"
+interface="$(find /sys/class/net -regex '/sys/class/net/wlan[0-9]+' -printf '%f\n')"
 
 if [ -z "$interface" ]
 then
@@ -17,9 +17,9 @@ is_enabled() {
 status() {
 	if is_enabled
 	then
-		echo 'enabled'
+		echo enabled
 	else
-		echo 'disabled'
+		echo disabled
 	fi
 }
 
@@ -42,13 +42,13 @@ network() {
 }
 
 case "$1" in
-	'status')
+	status)
 		status
 		;;
-	'toggle')
+	toggle)
 		toggle
 		;;
-	'network')
+	network)
 		network
 		;;
 	*)

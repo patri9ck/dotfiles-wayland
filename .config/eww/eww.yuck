@@ -161,7 +161,6 @@
 	        :onclick `eww open time`
           "")))))
         
-
 (defwidget launcher []
   (button :class "bar-button"
           :onclick `$HOME/.scripts/launcher open &`

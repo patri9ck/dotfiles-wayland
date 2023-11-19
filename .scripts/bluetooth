@@ -1,0 +1,38 @@
+#!/bin/sh
+
+is_enabled() {
+	if bluetoothctl show | grep -q 'Powered: no'
+	then
+		return 1
+	fi
+}
+
+status() {
+	if is_enabled
+	then
+		echo 'enabled'
+	else
+		echo 'disabled'
+	fi
+}
+
+toggle() {
+	if is_enabled
+	then
+		bluetoothctl power off
+	else
+		bluetoothctl power on
+	fi
+}
+
+case "$1" in
+	'status')
+		status
+		;;
+	'toggle')
+		toggle
+		;;
+	*)
+		exit 1
+		;;
+esac

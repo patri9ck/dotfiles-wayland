@@ -1,0 +1,50 @@
+#!/bin/sh
+
+battery="$(find '/sys/class/power_supply' -regex '/sys/class/power_supply/BAT[0-9]+')"
+
+if [ -z "$battery" ]
+then
+	exit 1
+fi
+
+status() {
+	cat "$battery/status" | awk '{print tolower($0)}'
+}
+
+capacity() {
+	echo "$(cat "$battery/capacity")%"
+}
+
+time() {
+	status="$(status)"
+
+	if [ "$status" = 'charging' ]
+	then
+		echo 'Charging...'
+	elif [ "$status" = "full" ]
+	then
+		echo 'Full'
+	else
+		energy="$(cat "$battery/energy_now")"
+		power="$(cat "$battery/power_now")"
+
+		hours=$(($energy / $power))
+
+		echo | awk "{printf \"%d Hours %d Minutes\n\", $hours, ($energy / $power - $hours) * 60}"
+	fi
+}
+
+case "$1" in
+	'status')
+		status
+		;;
+	'capacity')
+		capacity
+		;;
+	'time')
+		time
+		;;
+	*)
+		exit 1
+		;;
+esac	

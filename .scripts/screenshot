@@ -1,0 +1,57 @@
+#!/bin/sh
+
+directory="$HOME/Pictures/Screenshots"
+
+if ! [ -d "$directory" ]
+then
+	mkdir -p "$directory"
+fi
+
+image="$directory/$(date +'%Y-%m-%d-%H:%M:%S').png"
+log="$directory/.log"
+
+upload() {
+	if response="$(curl -f -s -H "Authorization: Client-ID $IMGUR_API_KEY" -F "image=@$image" 'https://api.imgur.com/3/image.xml')"
+	then
+		url=$(echo "$response" | xml sel -t --value-of '/data/link')
+		
+		body='Uploaded to Imgur'
+
+		wl-copy "$url"
+
+		echo "$url $(printf 'https://imgur.com/delete/%s' $(echo "$response" | xml sel -t --value-of '/data/deletehash'))" >> "$log"
+	else
+		wl-copy < "$image"
+	fi
+
+	notify-send 'Screenshot taken' "$body"
+}
+
+fullscreen() {
+	grim -o "$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')" "$image"
+
+	upload
+}
+
+selection() {
+	if ! selection="$(slurp)"
+	then
+		exit 1
+	fi
+
+	grim -g "$selection" "$image"
+
+	upload
+}
+
+case "$1" in
+	'fullscreen')
+		fullscreen
+		;;
+	'selection')
+		selection
+		;;
+	*)
+		exit 1
+		;;
+esac

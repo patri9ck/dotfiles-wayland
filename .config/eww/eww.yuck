@@ -1,0 +1,375 @@
+; Windows
+
+
+
+(defwindow bar :monitor 0
+               :geometry (geometry :width "100%"
+                                   :anchor "top center")
+	       :stacking "bg"
+	       :exclusive true
+  (container
+    (box :class "bar-window"
+         :orientation "h"
+      (start)
+      (center)
+      (end))))
+
+(defwindow time :monitor 0
+	        :geometry (geometry :x "5px"
+	                            :y "5px"
+			            :anchor "top left")
+                :stacking "fg"
+		:focusable true
+  (box :space-evenly false
+    (eventbox :onclick `eww close time`)
+      (container
+        (box :class "calendar-window"
+          (calendar :day `date +%d`
+                    :month `date +%m`
+	            :year `date +%Y`)))))
+
+(defwindow launcher :monitor 0
+                    :geometry (geometry :anchor "center")
+                    :stacking "fg"
+		    :focusable true
+  (box :space-evenly false
+    (eventbox :onclick `$HOME/.scripts/launcher close`)
+    (container
+      (box :class "launcher-window"
+           :orientation "v"
+	   :space-evenly false
+	   :spacing 10
+	   :width 400
+        (box :class "launcher-box"
+             :orientation "h"
+          (wlan)
+          (bluetooth)
+          (vpn)
+          (microphone)
+          (webcam))
+        (apps)))))
+
+
+
+; Variables
+
+
+
+(defvar apps "[]")
+
+(defvar launcher-opened false)
+
+(defvar wlan-hovered false)
+(defvar bluetooth-hovered false)
+(defvar brightness-hovered false)
+(defvar volume-hovered false)
+(defvar system-hovered false)
+(defvar time-hovered false)
+
+(defvar user "")
+(defvar hostname "")
+
+(defpoll uptime :interval "1s"
+  `uptime -p | awk '{for(i=1;i<=NF;i++){ $i=toupper(substr($i,1,1)) substr($i,2) }}1'`)
+
+(defpoll time :interval "1s"
+  `date +%H:%M`)
+
+(defpoll seconds :interval "1s"
+  `date +%S`)
+
+(defpoll wlan-status :interval "1s"
+  `[ "$($HOME/.scripts/wlan status)" = enabled ] && echo  || echo `)
+
+(defpoll wlan-network :interval "1s"
+  `$HOME/.scripts/wlan network`)
+
+(defpoll bluetooth-status :interval "1s"
+  `[ "$($HOME/.scripts/bluetooth status)" = enabled ] && echo  || echo `)
+
+(defpoll vpn-status :interval "1s"
+  `[ "$($HOME/.scripts/vpn status)" = enabled ] && echo  || echo `)
+
+(defpoll vpn-endpoint :interval "1s"
+  `$HOME/.scripts/vpn endpoint`)
+
+(defpoll microphone-status :interval "1s"
+  `[ "$(pamixer --default-source --get-mute)" = false ] && echo  || echo `)
+
+(defpoll webcam-status :interval "1s"
+  `[ "$($HOME/.scripts/webcam status)" = enabled ] && echo  || echo `)
+
+(defpoll brightness :interval "1s"
+  `[ -f "/usr/bin/light" ] && light`)
+
+(defpoll volume-status :interval "1s"
+  `[ "$(pamixer --get-mute)" = false ] && echo  || echo `)
+
+(defpoll volume :interval "1s"
+  `pamixer --get-volume`)
+
+(defpoll battery-status :interval "1s"
+  `[ "$($HOME/.scripts/battery status)" = charging ] && echo  || echo `)
+
+(defpoll battery-capacity :interval "1s"
+  `$HOME/.scripts/battery capacity`)
+
+(defpoll battery-time :interval "1s"
+  `$HOME/.scripts/battery time`)
+
+(defpoll music :interval "1s"
+  `$HOME/.scripts/music`)
+
+(deflisten workspaces :initial "[]"
+  `$HOME/.scripts/workspaces all`)
+
+(deflisten current-workspace :initial "1"
+  `$HOME/.scripts/workspaces current`)
+
+
+
+; Basic Widgets
+
+
+
+(defwidget container []
+  (box :class "container"
+    (children)))
+
+(defwidget start []
+  (box :halign "start"
+       :orientation "h"
+       :space-evenly false
+       :spacing 5
+    (time)
+    (system)
+    (battery)
+    (brightness)
+    (volume)))
+
+(defwidget center []
+  (box :halign "center"
+       :orientation "h"
+    (music)))
+
+(defwidget end []
+  (box :halign "end"
+       :orientation "h"
+       :space-evenly false
+       :spacing 5
+    (workspaces)
+    (launcher)))
+
+
+
+; Widgets
+
+
+
+(defwidget time []
+  (eventbox :onhover `eww update time-hovered=true`
+            :onhoverlost `eww update time-hovered=false`
+  (box :class "bar-box"
+       :orientation "h"
+       :space-evenly false
+       :tooltip seconds
+    (label :class "nested-label"
+           :text "")
+    (label :class "left-margin-button"
+           :text time)
+      (revealer :transition "slideright"
+                :reveal time-hovered
+        (button :class "left-margin-button"
+	        :onclick `eww open time`
+          "")))))
+        
+
+(defwidget launcher []
+  (button :class "bar-button"
+          :onclick `$HOME/.scripts/launcher open &`
+    ""))
+
+(defwidget apps []
+  (box :orientation "v"
+       :space-evenly false
+       :spacing 10
+    (box :class "launcher-box"
+         :orientation "h"
+         :space-evenly false
+	 :spacing 10
+      (label :class "nested-label"
+             :text "")
+      (input :class "input"
+             :hexpand true
+	     :onchange `$HOME/.scripts/launcher update "{}" &`
+	     :onaccept `$HOME/.scripts/launcher run "${apps[0].path}" &`))
+    (revealer :transition "slidedown"
+              :reveal launcher-opened
+      (scroll :hscroll false
+              :height 800
+        (box :orientation "v"
+             :space-evenly false
+	     :spacing 10
+          (for app in apps
+            (box :class "app-box"
+	         :orientation "h"
+                 :space-evenly false
+	         :spacing 10
+              (image :width 30
+	             :height 30
+		     :path {app.icon}
+	             :image-width 30
+	             :image-height 30)
+	      (button :class "nested-button"
+	              :onclick `$HOME/.scripts/launcher run "${app.path}" &`
+	        {app.name}))))))))
+
+(defwidget wlan []
+  (eventbox :onhover `eww update wlan-hovered=true`
+            :onhoverlost `eww update wlan-hovered=false`
+	    :tooltip wlan-network
+    (box :orientation "v"
+         :space-evenly false
+      (button :class "nested-button"
+              :onclick `$HOME/.scripts/wlan toggle`
+        wlan-status)
+      (revealer :transition "slidedown"
+                :reveal wlan-hovered
+        (button :class "top-margin-button"
+	        :onclick "$HOME/.scripts/launcher close & eww update wlan-hovered=false && pkill -x iwgtk || iwgtk &"
+          "")))))
+
+(defwidget bluetooth []
+  (eventbox :onhover `eww update bluetooth-hovered=true`
+            :onhoverlost `eww update bluetooth-hovered=false`
+    (box :orientation "v"
+         :space-evenly false
+      (button :class "nested-button"
+              :onclick `$HOME/.scripts/bluetooth toggle`
+        bluetooth-status)
+      (revealer :transition "slidedown"
+                :reveal bluetooth-hovered
+        (button :class "top-margin-button"
+	        :onclick `$HOME/.scripts/launcher close & eww update bluetooth-hovered=false && pkill -x blueman-manager || blueman-manager &`
+          "")))))
+
+(defwidget vpn []
+  (button :class "nested-button"
+          :valign "start"
+          :onclick `$HOME/.scripts/vpn toggle`
+          :tooltip vpn-endpoint
+	  :visible "${hostname == "notebook"}"
+    vpn-status))
+
+(defwidget microphone []
+  (button :class "nested-button"
+          :valign "start"
+          :onclick `pamixer --default-source -t`
+    microphone-status))
+
+(defwidget webcam []
+  (button :class "nested-button"
+          :valign "start"
+          :onclick `$HOME/.scripts/webcam toggle`
+    webcam-status))
+
+(defwidget brightness []
+  (eventbox :onhover `eww update brightness-hovered=true`
+            :onhoverlost `eww update brightness-hovered=false`
+	    :tooltip brightness
+    (box :class "bar-box"
+         :orientation "h"
+         :space-evenly false
+         :visible "${hostname == "notebook"}"
+      (label :class "nested-label"
+             :text "")
+      (revealer :transition "slideright"
+                :reveal brightness-hovered
+        (scale :class "scale"
+	       :value brightness
+	       :min 0
+	       :max 100
+	       :onchange `light -S "{}"`
+               :orientation "h")))))
+
+(defwidget volume []
+  (eventbox :onhover `eww update volume-hovered=true`
+            :onhoverlost `eww update volume-hovered=false`
+	    :tooltip volume
+    (box :class "bar-box"
+         :orientation "h"
+         :space-evenly false
+      (button :class "nested-button"
+              :onclick `pamixer -t`
+        volume-status)
+      (revealer :transition "slideright"
+                :reveal volume-hovered
+        (box :orientation "h"
+	     :space-evenly false
+	     :spacing 5
+          (scale :class "scale"
+	         :value volume
+	         :min 0
+	         :max 100
+	         :onchange `pamixer --set-volume "{}"`
+                 :orientation "h")
+          (button :class "nested-button"
+	          :onclick `pkill -x pavucontrol || pavucontrol &`
+	    ""))))))
+
+(defwidget battery []
+  (box :class "bar-box"
+       :orientation "h"
+       :space-evenly false
+       :spacing 5
+       :tooltip battery-time
+       :visible "${hostname == "notebook"}"
+    (label :class "nested-label"
+           :text battery-status)
+    (label :class "nested-label"
+           :text battery-capacity)))
+
+(defwidget workspaces []
+  (box :class "bar-box"
+       :orientation "h"
+       :space-evenly false
+       :spacing 5
+       :tooltip current-workspace
+    (for workspace in workspaces
+      (button :class "nested-button"
+	      :onclick `hyprctl dispatch workspace "${workspace.id}"`
+        "${workspace.id == current-workspace ? "" : ""}${workspace.id != current-workspace && workspace.windows > 0 ? "" : ""}${workspace.id != current-workspace && workspace.windows == 0 ? "" : ""}"))))
+
+(defwidget system []
+  (eventbox :onhover `eww update system-hovered=true`
+            :onhoverlost `eww update system-hovered=false`
+    (box :class "bar-box"
+         :orientation "h"
+	 :space-evenly false
+      (button :class "nested-button"
+              :onclick `poweroff`
+	      :tooltip uptime
+        "")
+      (revealer :transition "slideright"
+	        :reveal system-hovered
+	(box :orientation "h"
+	     :space-evenly false
+	     :spacing 5
+        (button :class "left-margin-button"
+	        :onclick `hyprctl dispatch exit`
+		:tooltip user
+          "")
+        (button :class "nested-button"
+	        :onclick `reboot`
+	  ""))))))
+
+(defwidget music []
+  (box :class "bar-box"
+       :orientation "h"
+       :space-evenly false
+       :spacing 5
+    (button :class "nested-button"
+            :onclick `pkill -x spotify || spotify &`
+      "")
+    (label :class "nested-label"
+           :text music)))

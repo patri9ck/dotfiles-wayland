@@ -1,0 +1,137 @@
+$background: #404552;
+$overlay-background: #2f343f;
+
+$text: #bac3cf;
+$selected-text: #ffffff;
+
+* { 
+	all: unset;
+}
+
+.container {
+	margin: 10px;
+}
+
+.bar-window {
+	background-color: $background;
+	border-radius: 5px;
+	padding: 5px;
+	box-shadow: 0px 0px 4px #000000;
+
+	font-family: Cantarell, MaterialIcons;
+}
+
+.launcher-window {
+	background-color: $background;
+	border-radius: 5px;
+	padding: 5px 5px 5px 5px;
+	box-shadow: 0px 0px 4px #000000;
+
+	font-family: Cantarell, MaterialIcons;
+	font-size: 20px;
+}
+
+.calendar-window {
+	background-color: $overlay-background;
+	border-radius: 5px;
+	padding: 10px 10px 10px 10px;
+	box-shadow: 0px 0px 4px #000000;
+
+	font-family: Cantarell;
+}
+
+.nested-button {
+	color: $text;
+}
+
+.nested-button:hover {
+	color: $selected-text;
+}
+
+.bar-button {
+	border-radius: 5px;
+	color: $text;
+	background-color: $overlay-background;
+	padding: 5px;
+}
+
+.bar-button:hover {
+	color: $selected-text;
+}
+
+.top-margin-button {
+	color: $text;
+	margin: 5px 0px 0px 0px;
+}
+
+.top-margin-button:hover {
+	color: $selected-text;
+}
+
+.left-margin-button {
+	color: $text;
+	margin: 0px 0px 0px 5px;
+}
+
+.left-margin-button:hover {
+	color: $selected-text;
+}
+
+.input {
+	color: $text;
+	caret-color: $text;
+}
+
+.bar-box {
+	border-radius: 5px;
+	background-color: $overlay-background;
+	padding: 5px;
+}
+
+.launcher-box {
+	border-radius: 5px;
+	background-color: $overlay-background;
+	padding: 10px;
+}
+
+.app-box {
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.nested-label {
+	color: $text;
+}
+
+.scale {
+	margin: 0px 0px 0px 5px;
+}
+
+.scale trough {
+	border-radius: 5px;
+	background-color: $text;
+	min-width: 100px;
+	min-height: 5px;
+}
+
+.scale trough highlight {
+	border-radius: 5px;
+	background-color: $selected-text;
+}
+
+calendar {
+	color: $text;
+}
+
+calendar:selected {
+	color: $selected-text;
+}
+
+tooltip {
+	background-color: #2f343f;
+	opacity: 0.8;
+	color: $text;
+	border-radius: 5px;
+}
+
+

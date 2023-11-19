@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+import subprocess
+import gi
+
+from pathlib import Path
+
+gi.require_version("Gtk", "3.0")
+
+from gi.repository import Gtk
+
+def get_icon(icon):
+    theme = Gtk.IconTheme.get_default()
+
+    icon_info = theme.lookup_icon(icon, 128, 0)
+
+    if icon_info is not None:
+        return icon_info.get_filename()
+
+
+def parse_entry(path, query):
+    name = None
+    icon = None
+
+    with open(path.as_posix(), "r") as file:
+        entry = False
+        
+        for line in file:
+            line = line.replace("\n", "")
+
+            if line == "[Desktop Entry]":
+                entry = True
+
+                continue
+
+            if not entry:
+                continue
+
+            parts = line.split("=")
+
+            if len(parts) != 2:
+                continue
+
+            match parts[0]:
+                case "NoDisplay":
+                    if parts[1] == "True":
+                        return None
+                case "Name":
+                    if name is None:
+                        name = parts[1]
+
+                        if not query.lower() in name.lower():
+                            return None
+                case "Icon":
+                    if icon is None:
+                        icon = get_icon(parts[1])
+
+    return { "name": name, "icon": icon, "path": path.name }
+
+
+def get_entries(query = ""):
+    entries = []
+
+    for path in Path("/usr/share/applications").glob("*.desktop"):
+        entry = parse_entry(path, query)
+
+        if entry is not None:
+            entries.append(entry)
+
+    return entries
+
+
+def update(entries):
+    subprocess.run(["eww", "update", f"apps={json.dumps(entries)}"])
+
+if __name__ == "__main__":
+    length = len(sys.argv)
+
+    if length < 2:
+        exit(1)
+
+    match sys.argv[1]:
+        case "open":
+            update(get_entries())
+
+            subprocess.run(["eww", "open", "launcher"])
+            subprocess.run(["eww", "update", "launcher-opened=true"])
+        case "close":
+            subprocess.run(["eww", "close", "launcher"])
+            subprocess.run(["eww", "update", "launcher-opened=false"])
+        case "update":
+            if length < 3:
+                entries = get_entries()
+            else:
+                entries = get_entries(sys.argv[2])
+
+            update(entries)
+        case "run":
+            if length < 3:
+                exit(1)
+
+            subprocess.run(["eww", "close", "launcher"])
+            subprocess.run(["gtk-launch", sys.argv[2]], cwd=Path.home())

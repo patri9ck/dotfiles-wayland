@@ -1,0 +1,83 @@
+# Desktop Environment
+blueman
+bluez-utils
+eww-wayland
+gnome-keyring
+grim
+hyprland
+hyprpaper
+iwd
+iwgtk
+jq
+kitty
+mako
+pamixer
+pavucontrol
+pipewire-pulse
+playerctl
+qt5-wayland
+qt6-wayland
+qt6ct
+slurp
+socat
+wl-clipboard
+wmname
+xdg-desktop-portal-wlr
+xmlstarlet
+zsh
+zsh-completions
+zsh-syntax-highlighting
+
+# Programming
+jdk-openjdk
+
+# File Manager
+fuse2
+gvfs-mtp
+mousepad
+rclone
+ristretto
+thunar
+thunar-archive-plugin
+xarchiver
+
+# Fonts
+adobe-source-code-pro-fonts
+adobe-source-sans-fonts
+adobe-source-serif-fonts
+noto-fonts
+noto-fonts-emoji
+ttf-caladea
+ttf-carlito
+ttf-dejavu
+ttf-gentium-basic
+ttf-liberation
+ttf-linux-libertine-g
+ttf-material-icons-git
+
+# Themes
+capitaine-cursors
+arc-gtk-theme
+arc-icon-theme
+
+# Command Line Tools
+a2ln
+cups
+hplip
+htop
+neovim
+
+# Applications
+bitwarden
+discord
+galculator
+google-chrome
+jetbrains-toolbox
+libreoffice-fresh
+ristretto
+spotify
+xournalpp
+
+# Hardware
+openrazer-daemon
+polychromatic

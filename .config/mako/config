@@ -1,0 +1,12 @@
+font=Cantarell 10
+background-color=#2f343fcc
+text-color=#bac3cf
+border-size=0
+border-radius=5
+margin=15
+padding=10
+progress-color=over #bac3cf
+max-icon-size=30
+format=%s\n%b
+default-timeout=5000
+ignore-timeout=1

@@ -1,0 +1,59 @@
+#!/bin/sh
+
+interface="$(find '/sys/class/net' -regex '/sys/class/net/wlan[0-9]+' -printf '%f\n')"
+
+if [ -z "$interface" ]
+then
+	exit 1
+fi
+
+is_enabled() {
+	if ! iwctl device "$interface" show | grep -q -E 'Powered +on'
+	then
+		return 1
+	fi
+}
+
+status() {
+	if is_enabled
+	then
+		echo 'enabled'
+	else
+		echo 'disabled'
+	fi
+}
+
+toggle() {
+	if is_enabled
+	then
+		iwctl device "$interface" set-property Powered off
+	else
+		iwctl device "$interface" set-property Powered on
+	fi
+}
+
+network() {
+	if ! is_enabled
+	then
+		exit 1
+	fi
+
+	iwctl station "$interface" get-networks | grep '>' | awk -F ' {2,}' '{print $3}'
+}
+
+case "$1" in
+	'status')
+		status
+		;;
+	'toggle')
+		toggle
+		;;
+	'network')
+		network
+		;;
+	*)
+		exit 1
+		;;
+esac
+
+

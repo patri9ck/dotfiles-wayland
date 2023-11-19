@@ -169,11 +169,11 @@
            :text "")
     (label :class "left-margin-button"
            :text time)
-      (revealer :transition "slideright"
-                :reveal time-hovered
-        (button :class "left-margin-button"
-	        :onclick `eww open time`
-          "")))))
+    (revealer :transition "slideright"
+              :reveal time-hovered
+      (button :class "left-margin-button"
+	      :onclick `eww open time`
+        "")))))
 
 
 (defwidget launcher []
@@ -185,7 +185,6 @@
 (defwidget apps []
   (box :orientation "v"
        :space-evenly false
-       :spacing 10
     (box :class "launcher-box"
          :orientation "h"
          :space-evenly false
@@ -200,7 +199,8 @@
               :reveal launcher-opened
       (scroll :hscroll false
               :height 800
-        (box :orientation "v"
+        (box :class "top-margin-box"
+	     :orientation "v"
              :space-evenly false
 	     :spacing 10
           (for app in apps
@@ -306,7 +306,7 @@
                 :reveal volume-hovered
         (box :orientation "h"
 	     :space-evenly false
-	     :spacing 10
+	     :spacing 5
           (scale :class "scale"
 	         :value volume
 	         :min 0
@@ -322,7 +322,7 @@
   (box :class "bar-box"
        :orientation "h"
        :space-evenly false
-       :spacing 10
+       :spacing 5
        :tooltip battery-time
        :visible "${hostname == "notebook"}"
     (label :class "nested-label"
@@ -357,7 +357,7 @@
 	        :reveal system-hovered
 	(box :orientation "h"
 	     :space-evenly false
-	     :spacing 10
+	     :spacing 5
         (button :class "left-margin-button"
 	        :onclick `hyprctl dispatch exit`
 		:tooltip user

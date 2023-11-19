@@ -18,10 +18,10 @@ capacity() {
 time() {
 	status="$(status)"
 
-	if [ "$status" = 'charging' ]
+	if [ "$status" = charging ]
 	then
 		echo Charging...
-	elif [ "$status" = "full" ]
+	elif [ "$status" = full ]
 	then
 		echo Full
 	else

@@ -28,3 +28,5 @@ Dotfiles can be installed by running:
 ```
 $ .dotfiles/meta/install.sh dotfiles
 ```
+
+This will create symbolic links from the cloned repository to your home directory.

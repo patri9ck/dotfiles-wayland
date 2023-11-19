@@ -58,7 +58,7 @@
 (defvar player-music "")
 (defvar player-opened false)
 (defpoll player-status :interval "1s"
-  `[ "$(playerctl -p spotify status)" = Playing ] && echo  || echo `)
+  `[ "$(playerctl -p "$PLAYER" status)" = Playing ] && echo  || echo `)
 
 
 (defvar system-hovered false)
@@ -147,6 +147,7 @@
   (box :halign "center"
        :orientation "h"
     (player)))
+
 
 (defwidget end []
   (box :halign "end"
@@ -371,7 +372,7 @@
        :orientation "h"
        :space-evenly false
     (button :class "nested-button"
-            :onclick `$HOME/.scripts/open spotify &`
+            :onclick `$HOME/.scripts/open "$PLAYER_EXECUTABLE" &`
       "")
     (revealer :transition "slideright"
               :reveal player-opened
@@ -381,11 +382,11 @@
         (label :class "left-margin-label"
                :text player-music)
 	(button :class "nested-button"
-	        :onclick `playerctl -p spotify previous`
+	        :onclick `playerctl -p "$PLAYER" previous`
 	  "")
 	(button :class "nested-button"
-	        :onclick `playerctl -p spotify play-pause`
+	        :onclick `playerctl -p "$PLAYER" play-pause`
 	  player-status)
 	(button :class "nested-button"
-	        :onclick `playerctl -p spotify next`
+	        :onclick `playerctl -p "$PLAYER" next`
 	  "")))))

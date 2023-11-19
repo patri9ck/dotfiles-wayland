@@ -1,6 +1,6 @@
 #!/bin/sh
 
-playerctl -s -p spotify -F metadata -f '{{artist}} - {{title}}'  | while read -r line
+playerctl -s -p "$PLAYER" -F metadata -f '{{artist}} - {{title}}'  | while read -r line
 do
 	if [ "$line" = '' ] 
 	then
@@ -10,15 +10,7 @@ do
 		then
 			sleep 1
 
-			artist="$(playerctl -s -p spotify metadata artist)"
-			title="$(playerctl -s -p spotify metadata title)"
-
-			if [ -z "$artist" ] || [ -z "$title" ]
-			then
-				continue
-			fi
-
-			line="$artist - $title"
+			line="playerctl -s -p "$PLAYER" metadata -f '{{artist}} - {{title}}'"
 		fi
 		
 		eww update "player-music=$line"

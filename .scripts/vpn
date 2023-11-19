@@ -33,7 +33,7 @@ toggle() {
 endpoint() {
 	if is_enabled
 	then
-		sudo wg | grep 'endpoint: ' | awk -F ': ' '{print $2}' 
+		sudo wg | grep 'endpoint: ' | awk -F 'endpoint: ' '{print $2}' 
 	fi
 }
 

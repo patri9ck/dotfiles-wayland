@@ -21,7 +21,7 @@ do
 			line="$artist - $title"
 		fi
 		
-		eww update "music=$line"
+		eww update "player-music=$line"
 		eww update player-opened=true
 	fi
 done

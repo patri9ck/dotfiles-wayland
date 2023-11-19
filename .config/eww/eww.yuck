@@ -55,8 +55,10 @@
 (defvar launcher-opened false)
 
 
-(defvar music "")
+(defvar player-music "")
 (defvar player-opened false)
+(defpoll player-status :interval "1s"
+  `[ "$(playerctl -p spotify status)" = Playing ] && echo  || echo `)
 
 
 (defvar system-hovered false)
@@ -144,7 +146,7 @@
 (defwidget center []
   (box :halign "center"
        :orientation "h"
-    (music)))
+    (player)))
 
 (defwidget end []
   (box :halign "end"
@@ -303,7 +305,7 @@
                 :reveal volume-hovered
         (box :orientation "h"
 	     :space-evenly false
-	     :spacing 5
+	     :spacing 10
           (scale :class "scale"
 	         :value volume
 	         :min 0
@@ -319,7 +321,7 @@
   (box :class "bar-box"
        :orientation "h"
        :space-evenly false
-       :spacing 5
+       :spacing 10
        :tooltip battery-time
        :visible "${hostname == "notebook"}"
     (label :class "nested-label"
@@ -354,7 +356,7 @@
 	        :reveal system-hovered
 	(box :orientation "h"
 	     :space-evenly false
-	     :spacing 5
+	     :spacing 10
         (button :class "left-margin-button"
 	        :onclick `hyprctl dispatch exit`
 		:tooltip user
@@ -364,7 +366,7 @@
 	  ""))))))
 
 
-(defwidget music []
+(defwidget player []
   (box :class "bar-box"
        :orientation "h"
        :space-evenly false
@@ -373,5 +375,17 @@
       "")
     (revealer :transition "slideright"
               :reveal player-opened
-      (label :class "left-margin-label"
-             :text music))))
+      (box :orientation "h"
+           :space-evenly false
+	   :spacing 10
+        (label :class "left-margin-label"
+               :text player-music)
+	(button :class "nested-button"
+	        :onclick `playerctl -p spotify previous`
+	  "")
+	(button :class "nested-button"
+	        :onclick `playerctl -p spotify play-pause`
+	  player-status)
+	(button :class "nested-button"
+	        :onclick `playerctl -p spotify next`
+	  "")))))

@@ -41,7 +41,7 @@ $selected-text: #ffffff;
 	background-color: $overlay-background;
 	border-radius: 5px;
 	color: $text;
-	padding: 5px;
+	padding: 5px 10px;
 }
 
 .bar-button:hover {
@@ -58,7 +58,7 @@ $selected-text: #ffffff;
 
 .top-margin-button {
 	color: $text;
-	margin: 5px 0px 0px 0px;
+	margin: 10px 0px 0px 0px;
 }
 
 .top-margin-button:hover {
@@ -67,7 +67,7 @@ $selected-text: #ffffff;
 
 .left-margin-button {
 	color: $text;
-	margin: 0px 0px 0px 5px;
+	margin: 0px 0px 0px 10px;
 }
 
 .left-margin-button:hover {
@@ -82,7 +82,7 @@ $selected-text: #ffffff;
 .bar-box {
 	background-color: $overlay-background;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 5px 10px;
 }
 
 .launcher-box {
@@ -92,7 +92,6 @@ $selected-text: #ffffff;
 }
 
 .app-box {
-	border-radius: 5px;
 	padding: 5px;
 }
 
@@ -102,11 +101,11 @@ $selected-text: #ffffff;
 
 .left-margin-label {
 	color: $text;
-	margin: 0px 0px 0px 5px;
+	margin: 0px 0px 0px 10px;
 }
 
 .scale {
-	margin: 0px 0px 0px 5px;
+	margin: 0px 0px 0px 10px;
 }
 
 .scale trough {

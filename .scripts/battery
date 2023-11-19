@@ -30,7 +30,7 @@ time() {
 
 		hours=$(($energy / $power))
 
-		echo | awk "{printf \"%d Hours %d Minutes\n\", $hours, ($energy / $power - $hours) * 60}"
+		echo | awk "{printf \"%d Hours %d Minutes Remaining\n\", $hours, ($energy / $power - $hours) * 60}"
 	fi
 }
 

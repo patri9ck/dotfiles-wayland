@@ -10,7 +10,15 @@ do
 		then
 			sleep 1
 
-			line="$(playerctl -s -p spotify metadata artist) - $(playerctl -s -p spotify metadata title)"
+			artist="$(playerctl -s -p spotify metadata artist)"
+			title="$(playerctl -s -p spotify metadata title)"
+
+			if [ -z "$artist" ] || [ -z "$title" ]
+			then
+				continue
+			fi
+
+			line="$artist - $title"
 		fi
 		
 		eww update "music=$line"

@@ -10,6 +10,7 @@
       (center)
       (end))))
 
+
 (defwindow time :monitor 0
 	        :geometry (geometry :x "5px"
 	                            :y "5px"
@@ -23,6 +24,7 @@
           (calendar :day `date +%d`
                     :month `date +%m`
 	            :year `date +%Y`)))))
+
 
 (defwindow launcher :monitor 0
                     :geometry (geometry :anchor "center")
@@ -45,80 +47,87 @@
           (webcam))
         (apps)))))
 
-(defvar apps "[]")
 
-(defvar launcher-opened false)
-
-(defvar wlan-hovered false)
-(defvar bluetooth-hovered false)
-(defvar brightness-hovered false)
-(defvar volume-hovered false)
-(defvar system-hovered false)
-(defvar time-hovered false)
-
-(defvar user "")
 (defvar hostname "")
 
+
+(defvar apps "[]")
+(defvar launcher-opened false)
+
+
+(defvar music "")
+(defvar player-opened false)
+
+
+(defvar system-hovered false)
+(defvar user "")
 (defpoll uptime :interval "1s"
   `uptime -p | awk '{for(i=1;i<=NF;i++){ $i=toupper(substr($i,1,1)) substr($i,2) }}1'`)
 
+
+(defvar time-hovered false)
 (defpoll time :interval "1s"
   `date +%H:%M`)
-
 (defpoll seconds :interval "1s"
   `date +%S`)
 
+
+(defvar wlan-hovered false)
 (defpoll wlan-status :interval "1s"
   `[ "$($HOME/.scripts/wlan status)" = enabled ] && echo  || echo `)
-
 (defpoll wlan-network :interval "1s"
   `$HOME/.scripts/wlan network`)
 
+
+(defvar bluetooth-hovered false)
 (defpoll bluetooth-status :interval "1s"
   `[ "$($HOME/.scripts/bluetooth status)" = enabled ] && echo  || echo `)
 
+
 (defpoll vpn-status :interval "1s"
   `[ "$($HOME/.scripts/vpn status)" = enabled ] && echo  || echo `)
-
 (defpoll vpn-endpoint :interval "1s"
   `$HOME/.scripts/vpn endpoint`)
+
 
 (defpoll microphone-status :interval "1s"
   `[ "$(pamixer --default-source --get-mute)" = false ] && echo  || echo `)
 
+
 (defpoll webcam-status :interval "1s"
   `[ "$($HOME/.scripts/webcam status)" = enabled ] && echo  || echo `)
 
+
+(defvar brightness-hovered false)
 (defpoll brightness :interval "1s"
   `[ "$HOSTNAME" = notebook ] && light`)
 
+
+(defvar volume-hovered false)
 (defpoll volume-status :interval "1s"
   `[ "$(pamixer --get-mute)" = false ] && echo  || echo `)
-
 (defpoll volume :interval "1s"
   `pamixer --get-volume`)
 
+
 (defpoll battery-status :interval "1s"
   `[ "$($HOME/.scripts/battery status)" = charging ] && echo  || echo `)
-
 (defpoll battery-capacity :interval "1s"
   `$HOME/.scripts/battery capacity`)
-
 (defpoll battery-time :interval "1s"
   `$HOME/.scripts/battery time`)
 
-(defpoll music :interval "1s"
-  `$HOME/.scripts/music`)
 
 (deflisten workspaces :initial "[]"
   `$HOME/.scripts/workspaces all`)
-
 (deflisten current-workspace :initial "1"
   `$HOME/.scripts/workspaces current`)
+
 
 (defwidget container []
   (box :class "container"
     (children)))
+
 
 (defwidget start []
   (box :halign "start"
@@ -130,6 +139,7 @@
     (battery)
     (brightness)
     (volume)))
+
 
 (defwidget center []
   (box :halign "center"
@@ -143,6 +153,7 @@
        :spacing 5
     (workspaces)
     (launcher)))
+
 
 (defwidget time []
   (eventbox :onhover `eww update time-hovered=true`
@@ -160,11 +171,13 @@
         (button :class "left-margin-button"
 	        :onclick `eww open time`
           "")))))
-        
+
+
 (defwidget launcher []
   (button :class "bar-button"
           :onclick `$HOME/.scripts/launcher open &`
     ""))
+
 
 (defwidget apps []
   (box :orientation "v"
@@ -201,6 +214,7 @@
 	              :onclick `$HOME/.scripts/launcher run "${app.path}" &`
 	        {app.name}))))))))
 
+
 (defwidget wlan []
   (eventbox :onhover `eww update wlan-hovered=true`
             :onhoverlost `eww update wlan-hovered=false`
@@ -216,6 +230,7 @@
 	        :onclick "$HOME/.scripts/launcher close & eww update wlan-hovered=false && pkill -x iwgtk || iwgtk &"
           "")))))
 
+
 (defwidget bluetooth []
   (eventbox :onhover `eww update bluetooth-hovered=true`
             :onhoverlost `eww update bluetooth-hovered=false`
@@ -230,6 +245,7 @@
 	        :onclick `$HOME/.scripts/launcher close & eww update bluetooth-hovered=false && pkill -x blueman-manager || blueman-manager &`
           "")))))
 
+
 (defwidget vpn []
   (button :class "nested-button"
           :valign "start"
@@ -238,17 +254,20 @@
 	  :visible "${hostname == "notebook"}"
     vpn-status))
 
+
 (defwidget microphone []
   (button :class "nested-button"
           :valign "start"
           :onclick `pamixer --default-source -t`
     microphone-status))
 
+
 (defwidget webcam []
   (button :class "nested-button"
           :valign "start"
           :onclick `$HOME/.scripts/webcam toggle`
     webcam-status))
+
 
 (defwidget brightness []
   (eventbox :onhover `eww update brightness-hovered=true`
@@ -268,6 +287,7 @@
 	       :max 100
 	       :onchange `light -S "{}"`
                :orientation "h")))))
+
 
 (defwidget volume []
   (eventbox :onhover `eww update volume-hovered=true`
@@ -294,6 +314,7 @@
 	          :onclick `pkill -x pavucontrol || pavucontrol &`
 	    ""))))))
 
+
 (defwidget battery []
   (box :class "bar-box"
        :orientation "h"
@@ -306,6 +327,7 @@
     (label :class "nested-label"
            :text battery-capacity)))
 
+
 (defwidget workspaces []
   (box :class "bar-box"
        :orientation "h"
@@ -316,6 +338,7 @@
       (button :class "nested-button"
 	      :onclick `hyprctl dispatch workspace "${workspace.id}"`
         "${workspace.id == current-workspace ? "" : ""}${workspace.id != current-workspace && workspace.windows > 0 ? "" : ""}${workspace.id != current-workspace && workspace.windows == 0 ? "" : ""}"))))
+
 
 (defwidget system []
   (eventbox :onhover `eww update system-hovered=true`
@@ -340,13 +363,15 @@
 	        :onclick `reboot`
 	  ""))))))
 
+
 (defwidget music []
   (box :class "bar-box"
        :orientation "h"
        :space-evenly false
-       :spacing 5
     (button :class "nested-button"
             :onclick `pkill -x spotify || spotify &`
       "")
-    (label :class "nested-label"
-           :text music)))
+    (revealer :transition "slideright"
+              :reveal player-opened
+      (label :class "left-margin-label"
+             :text music))))

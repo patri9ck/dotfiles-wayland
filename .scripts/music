@@ -1,16 +1,19 @@
 #!/bin/sh
 
-if playerctl -s -p spotify status >/dev/null
-then
-	title="$(playerctl -s -p spotify metadata title)"
-	artist="$(playerctl -s -p spotify metadata artist)"
-	
-	if [ -z "$title" ] || [ -z "$artist" ]
+playerctl -s -p spotify -F metadata -f '{{artist}} - {{title}}'  | while read -r line
+do
+	if [ "$line" = '' ] 
 	then
-		echo $artist$title
+		eww update player-opened=false
 	else
-		echo $artist - $title
+		if [ "$line" = - ]
+		then
+			sleep 1
+
+			line="$(playerctl -s -p spotify metadata artist) - $(playerctl -s -p spotify metadata title)"
+		fi
+		
+		eww update "music=$line"
+		eww update player-opened=true
 	fi
-else
-	echo No Music
-fi
+done

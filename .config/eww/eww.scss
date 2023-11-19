@@ -37,14 +37,6 @@ $selected-text: #ffffff;
 	font-family: Cantarell;
 }
 
-.nested-button {
-	color: $text;
-}
-
-.nested-button:hover {
-	color: $selected-text;
-}
-
 .bar-button {
 	background-color: $overlay-background;
 	border-radius: 5px;
@@ -53,6 +45,14 @@ $selected-text: #ffffff;
 }
 
 .bar-button:hover {
+	color: $selected-text;
+}
+
+.nested-button {
+	color: $text;
+}
+
+.nested-button:hover {
 	color: $selected-text;
 }
 
@@ -98,6 +98,11 @@ $selected-text: #ffffff;
 
 .nested-label {
 	color: $text;
+}
+
+.left-margin-label {
+	color: $text;
+	margin: 0px 0px 0px 5px;
 }
 
 .scale {

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -z "$1" ]
+then
+	exit 1
+fi
+
+if pid="$(pgrep -x "$1")"
+then
+	hyprctl dispatch focuswindow "pid:$pid"
+else
+	eval "$1"
+fi

@@ -31,7 +31,7 @@
                     :stacking "fg"
 		    :focusable true
   (box :space-evenly false
-    (eventbox :onclick `$HOME/.scripts/launcher close`)
+    (eventbox :onclick `$HOME/.scripts/launcher close &`)
     (container
       (box :class "launcher-window"
            :orientation "v"
@@ -229,7 +229,7 @@
       (revealer :transition "slidedown"
                 :reveal wlan-hovered
         (button :class "top-margin-button"
-	        :onclick "pkill -x iwgtk || (eww update wlan-hovered=false && $HOME/.scripts/launcher close && iwgtk &)"
+	        :onclick `$HOME/.scripts/launcher close & $HOME/.scripts/open iwgtk &`
           "")))))
 
 
@@ -244,10 +244,10 @@
       (revealer :transition "slidedown"
                 :reveal bluetooth-hovered
         (button :class "top-margin-button"
-	        :onclick `pkill -x blueman-manager || (eww update bluetooth-hovered=false && $HOME/.scripts/launcher close && blueman-manager &)`
+	        :onclick `$HOME/.scripts/launcher close & $HOME/.scripts/open blueman-manager &`
           "")))))
 
-
+ 
 (defwidget vpn []
   (button :class "nested-button"
           :valign "start"
@@ -313,7 +313,7 @@
 	         :onchange `pamixer --set-volume "{}"`
                  :orientation "h")
           (button :class "nested-button"
-	          :onclick `pkill -x pavucontrol || pavucontrol &`
+	          :onclick `$HOME/.scripts/open pavucontrol &`
 	    ""))))))
 
 
@@ -371,7 +371,7 @@
        :orientation "h"
        :space-evenly false
     (button :class "nested-button"
-            :onclick `pkill -x spotify || spotify &`
+            :onclick `$HOME/.scripts/open spotify &`
       "")
     (revealer :transition "slideright"
               :reveal player-opened

@@ -72,8 +72,15 @@ def get_entries(query):
     return entries
 
 
-def update(entries):
-    subprocess.run(["eww", "update", f"apps={json.dumps(entries)}"])
+def update(query):
+    subprocess.run(["eww", "update", f"apps={json.dumps(get_entries(query))}"])
+
+def close():
+    subprocess.run(["eww", "close", "launcher"])
+    subprocess.run(["eww", "update", "launcher-opened=false"])
+    subprocess.run(["eww", "update", "wlan-hovered=false"])
+    subprocess.run(["eww", "update", "bluetooth-hovered=false"])
+
 
 if __name__ == "__main__":
     length = len(sys.argv)
@@ -83,18 +90,18 @@ if __name__ == "__main__":
 
     match sys.argv[1]:
         case "open":
-            update(get_entries(""))
+            update("")
 
             subprocess.run(["eww", "open", "launcher"])
             subprocess.run(["eww", "update", "launcher-opened=true"])
         case "close":
-            subprocess.run(["eww", "close", "launcher"])
-            subprocess.run(["eww", "update", "launcher-opened=false"])
+            close()
         case "update":
-            update(get_entries("" if length < 3 else sys.argv[2]))
+            update("" if length < 3 else sys.argv[2])
         case "run":
             if length < 3:
                 exit(1)
 
-            subprocess.run(["eww", "close", "launcher"])
+            close()
+
             subprocess.run(["gtk-launch", sys.argv[2]], cwd=Path.home())

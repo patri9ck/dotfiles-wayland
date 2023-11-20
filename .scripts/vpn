@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if ! [ "$HOSTNAME" = notebook ]
+if [ "$HOSTNAME" != notebook ]
 then
 	exit 1
 fi

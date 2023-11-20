@@ -11,6 +11,7 @@ gi.require_version("Gtk", "3.0")
 
 from gi.repository import Gtk
 
+
 def get_icon(icon):
     theme = Gtk.IconTheme.get_default()
 
@@ -74,6 +75,7 @@ def get_entries(query):
 
 def update(query):
     subprocess.run(["eww", "update", f"apps={json.dumps(get_entries(query))}"])
+
 
 def close():
     subprocess.run(["eww", "close", "launcher"])

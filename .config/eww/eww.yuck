@@ -3,12 +3,14 @@
                                    :anchor "top center")
 	       :stacking "bg"
 	       :exclusive true
-  (container
-    (box :class "bar-window"
-         :orientation "h"
-      (start)
-      (center)
-      (end))))
+  (revealer :transition "crossfade"
+            :reveal bar-opened
+    (container
+      (box :class "bar-window"
+          :orientation "h"
+        (start)
+        (center)
+        (end)))))
 
 
 (defwindow time :monitor 0
@@ -19,11 +21,11 @@
 		:focusable true
   (box :space-evenly false
     (eventbox :onclick `eww close time`)
-      (container
-        (box :class "calendar-window"
-          (calendar :day `date +%d`
-                    :month `date +%m`
-	            :year `date +%Y`)))))
+    (container
+      (box :class "calendar-window"
+        (calendar :day `date +%d`
+                  :month `date +%m`
+	          :year `date +%Y`)))))
 
 
 (defwindow launcher :monitor 0
@@ -46,6 +48,9 @@
           (microphone)
           (webcam))
         (apps)))))
+
+
+(defvar bar-opened false)
 
 
 (defvar hostname "")

@@ -56,19 +56,27 @@ def parse_entry(path, query):
                             return None
                 case "Icon":
                     if icon is None:
-                        icon = get_icon(parts[1])
+                        icon = parts[1]
+
+                        if not Path(icon).is_file():
+                            icon = get_icon(icon)
 
     return { "name": name, "icon": icon, "path": path.name }
+
+
+def append(entries, query, directory):
+    for path in directory.glob("*.desktop"):
+        entry = parse_entry(path, query)
+
+        if entry is not None:
+            entries.append(entry)
 
 
 def get_entries(query):
     entries = []
 
-    for path in Path("/usr/share/applications").glob("*.desktop"):
-        entry = parse_entry(path, query)
-
-        if entry is not None:
-            entries.append(entry)
+    append(entries, query, Path("/usr/share/applications"))
+    append(entries, query, Path(Path.home(), ".local/share/applications"))
 
     return entries
 

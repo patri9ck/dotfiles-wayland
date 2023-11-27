@@ -86,8 +86,8 @@ def update(query):
 
 
 def close():
-    subprocess.run(["eww", "close", "launcher"])
-    subprocess.run(["eww", "update", "launcher-opened=false"])
+    subprocess.run(["eww", "close", "apps"])
+    subprocess.run(["eww", "update", "apps-opened=false"])
     subprocess.run(["eww", "update", "wlan-hovered=false"])
     subprocess.run(["eww", "update", "bluetooth-hovered=false"])
 
@@ -102,8 +102,8 @@ if __name__ == "__main__":
         case "open":
             update("")
 
-            subprocess.run(["eww", "open", "launcher"])
-            subprocess.run(["eww", "update", "launcher-opened=true"])
+            subprocess.run(["eww", "open", "apps"])
+            subprocess.run(["eww", "update", "apps-opened=true"])
         case "close":
             close()
         case "update":

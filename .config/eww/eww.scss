@@ -8,31 +8,30 @@ $selected-text: #ffffff;
 }
 
 .container {
-	margin: 10px;
+	margin: 8px;
 }
 
 .bar-window {
 	background-color: $background;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 2px;
 	box-shadow: 0px 0px 4px #000000;
 	font-family: Cantarell, MaterialIcons;
 }
 
-.launcher-window {
+.apps-window {
 	background-color: $background;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 4px;
 	box-shadow: 0px 0px 4px #000000;
 	font-family: Cantarell, MaterialIcons;
 	font-size: 20px;
 }
 
-.calendar-window {
+.time-window {
 	background-color: $overlay-background;
 	border-radius: 5px;
-	padding: 5px;
-	margin: 5px;
+	padding: 4px;
 	box-shadow: 0px 0px 4px #000000;
 	font-family: Cantarell;
 }
@@ -41,87 +40,86 @@ $selected-text: #ffffff;
 	background-color: $overlay-background;
 	border-radius: 5px;
 	color: $text;
-	padding: 5px 10px;
+	padding: 4px 8px;
+	margin: 2px;
 }
 
 .bar-button:hover {
 	color: $selected-text;
 }
 
-.nested-button {
-	color: $text;
-}
-
-.nested-button:hover {
-	color: $selected-text;
-}
-
-.top-margin-button {
-	color: $text;
-	margin: 5px 0px 0px 0px;
-}
-
-.top-margin-button:hover {
-	color: $selected-text;
-}
-
-.left-margin-button {
-	color: $text;
-	margin: 0px 0px 0px 5px;
-}
-
-.left-margin-button:hover {
-	color: $selected-text;
-}
-
-.input {
-	color: $text;
-	caret-color: $text;
-}
-
 .bar-box {
 	background-color: $overlay-background;
 	border-radius: 5px;
-	padding: 5px 10px;
+	padding: 0px 4px;
+	margin: 2px;
 }
 
-.launcher-box {
-	background-color: $overlay-background;
-	border-radius: 5px;
-	padding: 10px;
-}
-
-.app-box {
-	padding: 5px;
-}
-
-.top-margin-box {
-	margin: 10px 0px 0px 0px;
-}
-
-.nested-label {
+.bar-nested-button {
 	color: $text;
+	margin: 4px;
 }
 
-.left-margin-label {
+.bar-nested-button:hover {
+	color: $selected-text;
+}
+
+.bar-nested-label {
 	color: $text;
-	margin: 0px 0px 0px 10px;
+	margin: 4px;
 }
 
 .scale {
-	margin: 0px 0px 0px 5px;
+	margin: 4px;
 }
 
 .scale trough {
 	background-color: $text;
 	border-radius: 5px;
 	min-width: 100px;
-	min-height: 5px;
+	min-height: 4px;
 }
 
 .scale trough highlight {
 	background-color: $selected-text;
 	border-radius: 5px;
+}
+
+.apps-box {
+	background-color: $overlay-background;
+	border-radius: 5px;
+	padding: 0px 8px;
+	margin: 4px;
+}
+
+.apps-nested-button {
+	color: $text;
+	margin: 8px;
+}
+
+.apps-nested-button:hover {
+	color: $selected-text;
+}
+
+.apps-nested-label {
+	color: $text;
+	margin: 8px;
+}
+
+.scroll {
+	margin: 4px;
+}
+
+.input {
+	color: $text;
+	caret-color: $text;
+	margin: 8px;
+}
+
+.image {
+	min-width: 30px;
+	min-height: 30px;
+	margin: 8px;
 }
 
 calendar {

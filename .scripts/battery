@@ -34,6 +34,34 @@ time() {
 	fi
 }
 
+notify() {
+	cache="$(mktemp)"
+
+	while true
+	do
+		if [ "$(status)" = discharging ]
+		then
+			capacity="$(capacity)"
+
+			case "$capacity" in
+				20%|15%|10%|5%)
+					if ! grep -q -x "$capacity" "$cache"
+					then
+						notify-send "Battery at $capacity"
+
+						echo "$capacity" > "$cache"
+					fi
+
+					;;
+			esac
+		else
+			echo > "$cache"
+		fi
+
+		sleep 1
+	done
+}
+
 case "$1" in
 	status)
 		status
@@ -43,6 +71,9 @@ case "$1" in
 		;;
 	time)
 		time
+		;;
+	notify)
+		notify
 		;;
 	*)
 		exit 1

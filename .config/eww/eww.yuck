@@ -64,18 +64,22 @@
 (defvar player-music "")
 (defvar player-opened false)
 (defpoll player-status :interval "1s"
+                       :run-while player-opened
   `[ "$(playerctl -p "$PLAYER" status)" = Playing ] && echo  || echo `)
 
 
 (defvar system-hovered false)
 (defpoll system-user :interval "1s"
+                     :run-while system-hovered
   `whoami`)
 (defpoll system-uptime :interval "1s"
+                       :run-while system-hovered
   `uptime -p | awk '{for(i=1;i<=NF;i++){ $i=toupper(substr($i,1,1)) substr($i,2) }}1'`)
 
 
 (defvar time-hovered false)
 (defpoll time-seconds :interval "1s"
+                      :run-while time-hovered
   `date +%S`)
 (defpoll time :interval "1s"
   `date +%H:%M`)
@@ -83,32 +87,41 @@
 
 (defvar wlan-hovered false)
 (defpoll wlan-status :interval "1s"
+                     :run-while apps-opened
   `[ "$($HOME/.scripts/wlan status)" = enabled ] && echo  || echo `)
 (defpoll wlan-network :interval "1s"
+                      :run-while wlan-hovered
   `$HOME/.scripts/wlan network`)
 
 
 (defvar bluetooth-hovered false)
 (defpoll bluetooth-status :interval "1s"
+                          :run-while apps-opened
   `[ "$($HOME/.scripts/bluetooth status)" = enabled ] && echo  || echo `)
 
 
+(defvar vpn-hovered false)
 (defpoll vpn-status :interval "1s"
+                    :run-while apps-opened
   `[ "$($HOME/.scripts/vpn status)" = enabled ] && echo  || echo `)
 (defpoll vpn-endpoint :interval "1s"
+                      :run-while vpn-hovered
   `$HOME/.scripts/vpn endpoint`)
 
 
 (defpoll microphone-status :interval "1s"
+                           :run-while apps-opened
   `[ "$(pamixer --default-source --get-mute)" = false ] && echo  || echo `)
 
 
 (defpoll webcam-status :interval "1s"
+                       :run-while apps-opened
   `[ "$($HOME/.scripts/webcam status)" = enabled ] && echo  || echo `)
 
 
 (defvar brightness-hovered false)
 (defpoll brightness :interval "1s"
+                    :run-while brightness-hovered
   `[ "$HOSTNAME" = notebook ] && light`)
 
 
@@ -117,14 +130,17 @@
                        :initial "" 
   `[ "$(pamixer --get-mute)" = false ] && echo  || echo `)
 (defpoll volume :interval "1s"
+                :run-while volume-hovered
   `pamixer --get-volume`)
 
 
+(defvar battery-hovered false)
 (defpoll battery-status :interval "1s"
   `[ "$($HOME/.scripts/battery status)" = charging ] && echo  || echo `)
 (defpoll battery-capacity :interval "1s"
   `$HOME/.scripts/battery capacity`)
 (defpoll battery-time :interval "1s"
+                      :run-while battery-hovered
   `$HOME/.scripts/battery time`)
 
 
@@ -215,14 +231,16 @@
 	        :onclick `$HOME/.scripts/apps close & $HOME/.scripts/open blueman-manager &`
           "")))))
 
- 
+
 (defwidget vpn []
-  (button :class "apps-nested-button"
-          :valign "start"
-          :onclick `$HOME/.scripts/vpn toggle`
-          :tooltip vpn-endpoint
-	  :visible "${hostname == "notebook"}"
-    vpn-status))
+  (eventbox :onhover `eww update vpn-hovered=true`
+            :onhoverlost `eww update vpn-hovered=false`
+    (button :class "apps-nested-button"
+            :valign "start"
+            :onclick `$HOME/.scripts/vpn toggle`
+            :tooltip vpn-endpoint
+	    :visible "${hostname == "notebook"}"
+      vpn-status)))
 
 
 (defwidget microphone []
@@ -282,14 +300,16 @@
 
 
 (defwidget battery []
-  (box :class "bar-box"
-       :space-evenly false
-       :tooltip battery-time
-       :visible "${hostname == "notebook"}"
-    (label :class "bar-nested-label"
-           :text battery-status)
-    (label :class "bar-nested-label"
-           :text battery-capacity)))
+  (eventbox :onhover `eww update battery-hovered=true`
+            :onhoverlost `eww update battery-hovered=false`
+    (box :class "bar-box"
+         :space-evenly false
+         :tooltip battery-time
+         :visible "${hostname == "notebook"}"
+      (label :class "bar-nested-label"
+             :text battery-status)
+      (label :class "bar-nested-label"
+             :text battery-capacity))))
 
 
 (defwidget workspaces []
